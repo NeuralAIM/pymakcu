@@ -106,7 +106,9 @@ class SerialTransport:
         self._log(f"Connected to {self.port} at 115200.")
         if not self._change_baud_to_4M():
             raise Exception("Failed to switch to 4M baud.")
+        
         self._is_connected = True
+
         if self.send_init:
             self._stop_event.clear()
             self._listener_thread = threading.Thread(target=self._listen, kwargs={"debug": self.debug}, daemon=True)

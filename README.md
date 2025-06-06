@@ -11,12 +11,12 @@ A Python library for programmatically controlling the Makcu custom USB mouse emu
 -   **Full Mouse Control:** Move, click, hold buttons, and scroll.
 -   **Optimized Performance:** Zero delays and no sleep functions when sending commands.
 -   **Reliable Callbacks:** Fixed callback handling during command execution and multi-key presses.
--   **Enhanced Stability:** Many other improvements for better reliability and performance.
 -   **Advanced Movement:** Includes smooth linear movement and Bezier curve paths.
 -   **Human-like Clicks:** Emulate clicks with realistic, randomized delays.
 -   **Locking:** Programmatically lock mouse movement axes (X/Y) or individual buttons.
 -   **Real-time Monitoring:** Get live button state updates using callbacks.
 -   **Click Capturing:** Intercept physical button presses on the device.
+-   **Enhanced Stability:** Many other improvements for better reliability and performance.
 
 ## Installation
 
@@ -49,7 +49,7 @@ controller.disconnect()
 
 ### 1. Connection Management
 
--   `create_controller(fallback_com_port="")`: The main factory function. Finds, connects to, and initializes the device. If auto-detection fails, you can specify a port like `"COM3"` or `"/dev/ttyUSB0"`.
+-   `create_controller(fallback_com_port="", debug=False)`: The main factory function. Finds, connects to, and initializes the device. If auto-detection fails, you can specify a port like `"COM3"` or `"/dev/ttyUSB0"`. Set `debug=True` to enable detailed logging of all device communications.
 -   `controller.disconnect()`: Closes the serial connection. **It is crucial to call this when you are done.**
 -   `controller.is_connected()`: Returns `True` if the device is connected.
 
@@ -183,5 +183,10 @@ Some areas where we'd love to see contributions:
 - Adding unit tests
 - Optimizing performance
 - Supporting additional platforms
+
+**Development Tips:**
+- Use `create_controller(debug=True)` to enable detailed logging of all device communications, which is helpful for debugging and development
+- Check the debug output to understand the communication protocol between the library and the device
+- Use the debug mode to verify your changes are working as expected
 
 Feel free to open issues to discuss potential improvements or report bugs.
