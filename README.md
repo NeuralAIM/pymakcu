@@ -9,6 +9,9 @@ A Python library for programmatically controlling the Makcu custom USB mouse emu
 
 -   **Auto-Connect:** The library automatically finds the device by its VID/PID.
 -   **Full Mouse Control:** Move, click, hold buttons, and scroll.
+-   **Optimized Performance:** Zero delays and no sleep functions when sending commands.
+-   **Reliable Callbacks:** Fixed callback handling during command execution and multi-key presses.
+-   **Enhanced Stability:** Many other improvements for better reliability and performance.
 -   **Advanced Movement:** Includes smooth linear movement and Bezier curve paths.
 -   **Human-like Clicks:** Emulate clicks with realistic, randomized delays.
 -   **Locking:** Programmatically lock mouse movement axes (X/Y) or individual buttons.
@@ -163,3 +166,22 @@ print(f"Connected to {info.get('port')} (VID={info.get('vid')}, PID={info.get('p
 version = controller.get_firmware_version()
 print(f"Firmware version: {version}")
 ```
+
+## Contributing
+
+We welcome contributions to improve pymakcu! Whether you're fixing bugs, adding new features, or improving documentation, your help is valuable. Here's how you can contribute:
+
+1. Fork the repository
+2. Create a new branch for your feature/fix
+3. Make your changes
+4. Submit a pull request
+
+Some areas where we'd love to see contributions:
+- Adding support for more mouse features
+- Improving error handling and recovery
+- Creating more examples and documentation
+- Adding unit tests
+- Optimizing performance
+- Supporting additional platforms
+
+Feel free to open issues to discuss potential improvements or report bugs.
