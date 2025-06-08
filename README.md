@@ -1,7 +1,7 @@
 # pymakcu
 
 [![PyPI version](https://badge.fury.io/py/pymakcu.svg)](https://badge.fury.io/py/pymakcu)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 A Python library for programmatically controlling the Makcu custom USB mouse emulator device via a COM port. This library provides a high-level and convenient API for automating mouse actions.
 
