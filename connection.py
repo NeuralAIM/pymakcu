@@ -141,16 +141,13 @@ class SerialTransport:
                 self.serial.reset_input_buffer()
 
             self.serial.write(command.encode("ascii") + b"\r\n")
+            
             if expect_response:
                 self.serial.flush()
-
-            if expect_response:
                 response = self.receive_response(sent_command=command)
                 if not response:
                     raise Exception(f"No response from device for command: {command}")
                 return response
-            if expect_response:
-                self.serial.reset_input_buffer()
 
     def get_button_states(self):
         return dict(self._button_states)
