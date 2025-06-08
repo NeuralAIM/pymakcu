@@ -26,7 +26,6 @@ class SerialTransport:
         self._stop_event = threading.Event()
         self._listener_thread = None
         self._button_states = {btn: False for btn in self._button_map.values()}
-        self._pause_listener = False
 
         self.port = self.find_com_port()
         if not self.port:
@@ -80,7 +79,7 @@ class SerialTransport:
     def _open_serial_port(self, port, baud_rate):
         try:
             self._log(f"Trying to open {port} at {baud_rate} baud.")
-            return serial.Serial(port, baud_rate, timeout=0.05)
+            return serial.Serial(port, baud_rate, timeout=0.25)
         except serial.SerialException:
             self._log(f"Failed to open {port} at {baud_rate} baud.")
             return None
@@ -90,8 +89,8 @@ class SerialTransport:
             self._log("Sending baud rate switch command to 4M.")
             self.serial.write(self.baud_change_command)
             self.serial.flush()
-            self.serial.baudrate = 4000000
             time.sleep(0.05)
+            self.serial.baudrate = 4000000
             self._log("Switched to 4M baud successfully.")
             return True
         return False
@@ -110,13 +109,13 @@ class SerialTransport:
         self._is_connected = True
 
         if self.send_init:
-            self._stop_event.clear()
-            self._listener_thread = threading.Thread(target=self._listen, kwargs={"debug": self.debug}, daemon=True)
             with self._lock:
                 self.serial.write(b"km.buttons(1)\r")
                 self.serial.flush()
                 self._log("Sended init command: km.buttons(1)")
-            self._listener_thread.start()
+                self._stop_event.clear()
+                self._listener_thread = threading.Thread(target=self._listen, kwargs={"debug": self.debug}, daemon=True)
+                self._listener_thread.start()
 
     def disconnect(self):
         if self.send_init:
@@ -138,22 +137,20 @@ class SerialTransport:
             raise Exception("Serial connection not open.")
         
         with self._lock:
-            self._pause_listener = True
-
             if expect_response:
                 self.serial.reset_input_buffer()
 
             self.serial.write(command.encode("ascii") + b"\r\n")
-            self.serial.flush()
+            if expect_response:
+                self.serial.flush()
 
             if expect_response:
                 response = self.receive_response(sent_command=command)
                 if not response:
                     raise Exception(f"No response from device for command: {command}")
                 return response
-
-            self.serial.reset_input_buffer()
-            self._pause_listener = False
+            if expect_response:
+                self.serial.reset_input_buffer()
 
     def get_button_states(self):
         return dict(self._button_states)
@@ -197,10 +194,6 @@ class SerialTransport:
         self._last_mask = 0
 
         while self._is_connected and not self._stop_event.is_set():
-            if self._pause_listener:
-                time.sleep(0.001)
-                continue
-
             try:
                 byte = self.serial.read(1)
                 if not byte:
